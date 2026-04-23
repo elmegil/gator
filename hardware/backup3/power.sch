@@ -1,0 +1,367 @@
+EESchema Schematic File Version 2
+LIBS:trigger-seq-rescue
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:cmos_ieee
+LIBS:petelib
+LIBS:switches
+LIBS:trigger-seq-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 2 6
+Title "Voice Host"
+Date "2016-05-20"
+Rev "0.1"
+Comp "Frogleg Synthesis"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L CONN_02X05 P1
+U 1 1 573D558D
+P 2200 2450
+F 0 "P1" H 2200 2750 50  0000 C CNN
+F 1 "CONN_02X05" H 2200 2150 50  0000 C CNN
+F 2 "Connect:VASCH5x2" H 2200 1250 50  0001 C CNN
+F 3 "" H 2200 1250 50  0000 C CNN
+	1    2200 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR1
+U 1 1 573D5808
+P 2550 2650
+F 0 "#PWR1" H 2550 2400 50  0001 C CNN
+F 1 "GND" H 2550 2500 50  0000 C CNN
+F 2 "" H 2550 2650 50  0000 C CNN
+F 3 "" H 2550 2650 50  0000 C CNN
+	1    2550 2650
+	1    0    0    -1  
+$EndComp
+$Comp
+L +12V #PWR4
+U 1 1 573D586D
+P 3400 2800
+F 0 "#PWR4" H 3400 2650 50  0001 C CNN
+F 1 "+12V" H 3400 2940 50  0000 C CNN
+F 2 "" H 3400 2800 50  0000 C CNN
+F 3 "" H 3400 2800 50  0000 C CNN
+	1    3400 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L -12V #PWR6
+U 1 1 573D58D2
+P 3750 2250
+F 0 "#PWR6" H 3750 2350 50  0001 C CNN
+F 1 "-12V" H 3750 2400 50  0000 C CNN
+F 2 "" H 3750 2250 50  0000 C CNN
+F 3 "" H 3750 2250 50  0000 C CNN
+	1    3750 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP1 C2
+U 1 1 573FC62E
+P 3300 2400
+F 0 "C2" H 3325 2500 50  0000 L CNN
+F 1 "10uF" H 3325 2300 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Radial_D5_L6_P2.5" H 3300 2400 50  0001 C CNN
+F 3 "" H 3300 2400 50  0000 C CNN
+	1    3300 2400
+	-1   0    0    1   
+$EndComp
+$Comp
+L CP1 C1
+U 1 1 573FC6D1
+P 3250 2950
+F 0 "C1" H 3275 3050 50  0000 L CNN
+F 1 "10uF" H 3275 2850 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Radial_D5_L6_P2.5" H 3250 2950 50  0001 C CNN
+F 3 "" H 3250 2950 50  0000 C CNN
+	1    3250 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1950 2650 1950 2800
+Wire Wire Line
+	1950 2800 2600 2800
+Wire Wire Line
+	2450 2800 2450 2650
+Wire Wire Line
+	2450 2550 3300 2550
+Wire Wire Line
+	2550 2350 2550 2650
+Wire Wire Line
+	2550 2450 2450 2450
+Wire Wire Line
+	2450 2350 2550 2350
+Connection ~ 2550 2450
+Wire Wire Line
+	1950 2350 1850 2350
+Wire Wire Line
+	1850 2450 1950 2450
+Wire Wire Line
+	1850 2550 1950 2550
+Connection ~ 2550 2350
+Connection ~ 2550 2550
+Wire Wire Line
+	2450 2250 2750 2250
+Connection ~ 2450 2800
+$Comp
+L D D2
+U 1 1 5759D319
+P 3050 2400
+F 0 "D2" H 3050 2500 50  0000 C CNN
+F 1 "1N4001" H 3050 2300 50  0000 C CNN
+F 2 "Diodes_ThroughHole:Diode_DO-41_SOD81_Horizontal_RM10" H 3050 2400 50  0001 C CNN
+F 3 "" H 3050 2400 50  0000 C CNN
+	1    3050 2400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L D D1
+U 1 1 5759D5D2
+P 3000 2950
+F 0 "D1" H 3000 3050 50  0000 C CNN
+F 1 "1N4001" H 3000 2850 50  0000 C CNN
+F 2 "Diodes_ThroughHole:Diode_DO-41_SOD81_Horizontal_RM10" H 3000 2950 50  0001 C CNN
+F 3 "" H 3000 2950 50  0000 C CNN
+	1    3000 2950
+	0    1    1    0   
+$EndComp
+$Comp
+L F_Small F2
+U 1 1 5759DBA9
+P 2850 2250
+F 0 "F2" H 2810 2310 50  0000 L CNN
+F 1 "F_Small" H 2700 2150 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Disc_D7.5_P5" H 2850 2250 50  0001 C CNN
+F 3 "" H 2850 2250 50  0000 C CNN
+	1    2850 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L F_Small F1
+U 1 1 5759DD97
+P 2700 2800
+F 0 "F1" H 2660 2860 50  0000 L CNN
+F 1 "F_Small" H 2580 2740 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Disc_D7.5_P5" H 2700 2800 50  0001 C CNN
+F 3 "" H 2700 2800 50  0000 C CNN
+	1    2700 2800
+	1    0    0    -1  
+$EndComp
+Connection ~ 2550 2650
+$Comp
+L PWR_FLAG #FLG3
+U 1 1 575A2909
+P 3450 2250
+F 0 "#FLG3" H 3450 2345 50  0001 C CNN
+F 1 "PWR_FLAG" H 3450 2430 50  0000 C CNN
+F 2 "" H 3450 2250 50  0000 C CNN
+F 3 "" H 3450 2250 50  0000 C CNN
+	1    3450 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG2
+U 1 1 575A2ACC
+P 3100 2800
+F 0 "#FLG2" H 3100 2895 50  0001 C CNN
+F 1 "PWR_FLAG" H 3100 2980 50  0000 C CNN
+F 2 "" H 3100 2800 50  0000 C CNN
+F 3 "" H 3100 2800 50  0000 C CNN
+	1    3100 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG1
+U 1 1 5759E261
+P 2700 2550
+F 0 "#FLG1" H 2700 2645 50  0001 C CNN
+F 1 "PWR_FLAG" H 2700 2730 50  0000 C CNN
+F 2 "" H 2700 2550 50  0000 C CNN
+F 3 "" H 2700 2550 50  0000 C CNN
+	1    2700 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1950 2250 1950 2050
+Wire Wire Line
+	1950 2050 2550 2050
+Wire Wire Line
+	2550 2050 2550 2250
+Connection ~ 2550 2250
+Wire Wire Line
+	2950 2250 3750 2250
+Connection ~ 3050 2250
+Connection ~ 3300 2250
+Connection ~ 3450 2250
+Connection ~ 3050 2550
+Connection ~ 2700 2550
+Wire Wire Line
+	2700 2550 2700 3150
+Wire Wire Line
+	2800 2800 4500 2800
+Connection ~ 3000 2800
+Connection ~ 3100 2800
+Connection ~ 3250 2800
+Wire Wire Line
+	1850 2350 1850 3100
+Connection ~ 1850 2450
+Wire Wire Line
+	1850 3100 4500 3100
+Connection ~ 1850 2550
+Connection ~ 2700 3100
+Connection ~ 3000 3100
+$Comp
+L VSS #PWR3
+U 1 1 580DAE91
+P 2850 2550
+F 0 "#PWR3" H 2850 2400 50  0001 C CNN
+F 1 "VSS" H 2850 2700 50  0000 C CNN
+F 2 "" H 2850 2550 50  0000 C CNN
+F 3 "" H 2850 2550 50  0000 C CNN
+	1    2850 2550
+	1    0    0    -1  
+$EndComp
+Connection ~ 2850 2550
+$Comp
+L C C3
+U 1 1 580DB078
+P 3750 2950
+F 0 "C3" H 3775 3050 50  0000 L CNN
+F 1 "100n" H 3775 2850 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Rect_L7_W2_P5" H 3788 2800 50  0001 C CNN
+F 3 "" H 3750 2950 50  0000 C CNN
+	1    3750 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C5
+U 1 1 580DB0C1
+P 4000 2950
+F 0 "C5" H 4025 3050 50  0000 L CNN
+F 1 "100n" H 4025 2850 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Rect_L7_W2_P5" H 4038 2800 50  0001 C CNN
+F 3 "" H 4000 2950 50  0000 C CNN
+	1    4000 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C6
+U 1 1 580DB0EE
+P 4250 2950
+F 0 "C6" H 4275 3050 50  0000 L CNN
+F 1 "100n" H 4275 2850 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Rect_L7_W2_P5" H 4288 2800 50  0001 C CNN
+F 3 "" H 4250 2950 50  0000 C CNN
+	1    4250 2950
+	1    0    0    -1  
+$EndComp
+Connection ~ 3400 2800
+Connection ~ 3750 2800
+Connection ~ 4000 2800
+Connection ~ 3250 3100
+Connection ~ 3750 3100
+Connection ~ 4000 3100
+Text Notes 3850 3200 0    60   ~ 0
+bypass
+$Comp
+L C C7
+U 1 1 580F07B2
+P 4500 2950
+F 0 "C7" H 4525 3050 50  0000 L CNN
+F 1 "100n" H 4525 2850 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Rect_L7_W2_P5" H 4538 2800 50  0001 C CNN
+F 3 "" H 4500 2950 50  0000 C CNN
+	1    4500 2950
+	1    0    0    -1  
+$EndComp
+Connection ~ 3750 2250
+Connection ~ 3300 2550
+Connection ~ 4250 2800
+Connection ~ 4250 3100
+$Comp
+L VDD #PWR5
+U 1 1 580E4D66
+P 3550 2750
+F 0 "#PWR5" H 3550 2600 50  0001 C CNN
+F 1 "VDD" H 3550 2900 50  0000 C CNN
+F 2 "" H 3550 2750 50  0000 C CNN
+F 3 "" H 3550 2750 50  0000 C CNN
+	1    3550 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3550 2750 3550 2800
+Connection ~ 3550 2800
+$Comp
+L CONN_01X04 P8
+U 1 1 58B2703E
+P 1450 2450
+F 0 "P8" H 1450 2700 50  0000 C CNN
+F 1 "CONN_01X04" V 1550 2450 50  0000 C CNN
+F 2 "My Library:MTA-156-4" H 1450 2450 50  0001 C CNN
+F 3 "" H 1450 2450 50  0000 C CNN
+	1    1450 2450
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1950 2250 1650 2250
+Wire Wire Line
+	1650 2250 1650 2300
+Wire Wire Line
+	1950 2650 1650 2650
+Wire Wire Line
+	1650 2650 1650 2600
+Wire Wire Line
+	1650 2500 1850 2500
+Connection ~ 1850 2500
+Wire Wire Line
+	1650 2400 1850 2400
+Connection ~ 1850 2400
+$Comp
+L GND #PWR2
+U 1 1 58B27B82
+P 2700 3150
+F 0 "#PWR2" H 2700 2900 50  0001 C CNN
+F 1 "GND" H 2700 3000 50  0000 C CNN
+F 2 "" H 2700 3150 50  0000 C CNN
+F 3 "" H 2700 3150 50  0000 C CNN
+	1    2700 3150
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC

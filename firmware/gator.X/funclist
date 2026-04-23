@@ -1,0 +1,11 @@
+_curve: STRCODE, 274 0 2048
+___aldiv: CODE, 19 0 143
+__stringtab: STRCODE, 256 0 18
+_ISR: CODE, 227 0 27
+_main: CODE, 3777 0 319
+___lmul: CODE, 162 0 65
+_Init_interrupts: CODE, 3681 0 10
+__initialization: CODE, 3691 0 10
+_Acquire: CODE, 3738 0 39
+_Init_PIC: CODE, 3704 0 34
+Total: 2713

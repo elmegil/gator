@@ -1,0 +1,162 @@
+[p GLOBOPT AUTOSTATIC IEEE_DBL IEEE_FLT PIC14 PIC14E ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 16F15345 ]
+[d frameptr 6 ]
+"5 /Applications/microchip/xc8/v2.41/pic/sources/c99/common/aldiv.c
+[v ___aldiv __aldiv `(l  1 e 4 0 ]
+"10 /Applications/microchip/xc8/v2.41/pic/sources/c99/common/sprcadd.c
+[v ___fladd __fladd `(d  1 e 4 0 ]
+"15 /Applications/microchip/xc8/v2.41/pic/sources/c99/common/Umul32.c
+[v ___lmul __lmul `(ul  1 e 4 0 ]
+"4 /Applications/microchip/xc8/v2.41/pic/sources/c99/common/Umul8_16.c
+[v __Umul8_16 _Umul8_16 `(ui  1 e 2 0 ]
+"222 /Users/petehartman/Documents/MPLAB/gator.X/main.c
+[v _Init_PIC Init_PIC `(v  1 e 1 0 ]
+"249
+[v _Init_interrupts Init_interrupts `(v  1 e 1 0 ]
+"279
+[v _ISR ISR `II(v  1 e 1 0 ]
+"348
+[v _Acquire Acquire `(i  1 e 2 0 ]
+"363
+[v _main main `(v  1 e 1 0 ]
+"413 /Applications/microchip/mplabx/v6.10/packs/Microchip/PIC16F1xxxx_DFP/1.18.352/xc8/pic/include/proc/pic16f15345.h
+[v _INTCON INTCON `VEuc  1 e 1 @11 ]
+"446
+[v _PORTA PORTA `VEuc  1 e 1 @12 ]
+"496
+[v _PORTB PORTB `VEuc  1 e 1 @13 ]
+"535
+[v _PORTC PORTC `VEuc  1 e 1 @14 ]
+"597
+[v _TRISA TRISA `VEuc  1 e 1 @18 ]
+"642
+[v _TRISB TRISB `VEuc  1 e 1 @19 ]
+"681
+[v _TRISC TRISC `VEuc  1 e 1 @20 ]
+"896
+[v _ADRESL ADRESL `VEuc  1 e 1 @155 ]
+"966
+[v _ADRESH ADRESH `VEuc  1 e 1 @156 ]
+"1036
+[v _ADCON0 ADCON0 `VEuc  1 e 1 @157 ]
+"1107
+[v _ADCON1 ADCON1 `VEuc  1 e 1 @158 ]
+"2644
+[v _SSP1CON1 SSP1CON1 `VEuc  1 e 1 @400 ]
+"4499
+[v _CCP1CON CCP1CON `VEuc  1 e 1 @782 ]
+"4732
+[v _CCP2CON CCP2CON `VEuc  1 e 1 @786 ]
+"6616
+[v _TMR0L TMR0L `VEuc  1 e 1 @1436 ]
+"7008
+[v _T0CON0 T0CON0 `VEuc  1 e 1 @1438 ]
+"7073
+[v _T0CON1 T0CON1 `VEuc  1 e 1 @1439 ]
+"7921
+[v _PIR0 PIR0 `VEuc  1 e 1 @1804 ]
+"8216
+[v _PIE0 PIE0 `VEuc  1 e 1 @1814 ]
+"8505
+[v _PMD0 PMD0 `VEuc  1 e 1 @1942 ]
+"8550
+[v _PMD1 PMD1 `VEuc  1 e 1 @1943 ]
+"8598
+[v _PMD2 PMD2 `VEuc  1 e 1 @1944 ]
+"8643
+[v _PMD3 PMD3 `VEuc  1 e 1 @1945 ]
+"8693
+[v _PMD4 PMD4 `VEuc  1 e 1 @1946 ]
+"8733
+[v _PMD5 PMD5 `VEuc  1 e 1 @1947 ]
+"10147
+[v _OSCFRQ OSCFRQ `VEuc  1 e 1 @2195 ]
+"17934
+[v _ANSELA ANSELA `VEuc  1 e 1 @7992 ]
+"17979
+[v _WPUA WPUA `VEuc  1 e 1 @7993 ]
+"18319
+[v _ANSELB ANSELB `VEuc  1 e 1 @8003 ]
+"18631
+[v _ANSELC ANSELC `VEuc  1 e 1 @8014 ]
+"22527
+[v _RA2 RA2 `VEb  1 e 0 @98 ]
+"22563
+[v _RA4 RA4 `VEb  1 e 0 @100 ]
+"22581
+[v _RA5 RA5 `VEb  1 e 0 @101 ]
+"22689
+[v _RC1 RC1 `VEb  1 e 0 @113 ]
+"114 /Users/petehartman/Documents/MPLAB/gator.X/main.c
+[v _clock0 clock0 `ui  1 e 2 0 ]
+"115
+[v _duty duty `ul  1 e 4 0 ]
+"116
+[v _period period `ui  1 e 2 0 ]
+"117
+[v _row row `c  1 e 1 0 ]
+"118
+[v _increment increment `c  1 e 1 0 ]
+"119
+[v _column column `uc  1 e 1 0 ]
+"120
+[v _last last `uc  1 e 1 0 ]
+"121
+[v _offset offset `ul  1 e 4 0 ]
+"122
+[v _evenodd evenodd `c  1 e 1 0 ]
+"155
+[v _curve curve `DC[1024]i  1 e 2048 0 ]
+"363
+[v _main main `(v  1 e 1 0 ]
+{
+"387
+} 0
+"15 /Applications/microchip/xc8/v2.41/pic/sources/c99/common/Umul32.c
+[v ___lmul __lmul `(ul  1 e 4 0 ]
+{
+"17
+[v ___lmul@product product `ul  1 a 4 6 ]
+"15
+[v ___lmul@multiplier multiplier `ul  1 p 4 16 ]
+[v ___lmul@multiplicand multiplicand `ul  1 p 4 20 ]
+"129
+} 0
+"5 /Applications/microchip/xc8/v2.41/pic/sources/c99/common/aldiv.c
+[v ___aldiv __aldiv `(l  1 e 4 0 ]
+{
+"10
+[v ___aldiv@quotient quotient `l  1 a 4 35 ]
+"11
+[v ___aldiv@sign sign `uc  1 a 1 34 ]
+[v ___aldiv@counter counter `uc  1 a 1 33 ]
+"5
+[v ___aldiv@divisor divisor `l  1 p 4 24 ]
+[v ___aldiv@dividend dividend `l  1 p 4 28 ]
+"41
+} 0
+"249 /Users/petehartman/Documents/MPLAB/gator.X/main.c
+[v _Init_interrupts Init_interrupts `(v  1 e 1 0 ]
+{
+"258
+} 0
+"222
+[v _Init_PIC Init_PIC `(v  1 e 1 0 ]
+{
+"247
+} 0
+"348
+[v _Acquire Acquire `(i  1 e 2 0 ]
+{
+[v Acquire@adcon adcon `uc  1 a 1 wreg ]
+[v Acquire@adcon adcon `uc  1 a 1 wreg ]
+[v Acquire@adcon adcon `uc  1 a 1 5 ]
+"357
+} 0
+"279
+[v _ISR ISR `II(v  1 e 1 0 ]
+{
+"342
+} 0
