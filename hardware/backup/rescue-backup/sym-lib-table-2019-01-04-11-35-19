@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name trigger-seq-rescue)(type Legacy)(uri ${KIPRJMOD}/trigger-seq-rescue.lib)(options "")(descr ""))
+)

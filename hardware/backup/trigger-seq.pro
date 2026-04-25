@@ -1,6 +1,6 @@
-update=Monday, October 24, 2016 'AMt' 09:36:53 AM
+update=Friday, January 04, 2019 at 11:35:25 AM
 version=1
-last_client=kicad
+last_client=eeschema
 [pcbnew]
 version=1
 LastNetListRead=
@@ -27,36 +27,4 @@ NetIExt=net
 version=1
 [eeschema]
 version=1
-LibDir=../library
-[eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=transistors
-LibName4=conn
-LibName5=linear
-LibName6=regul
-LibName7=74xx
-LibName8=cmos4000
-LibName9=adc-dac
-LibName10=memory
-LibName11=xilinx
-LibName12=microcontrollers
-LibName13=dsp
-LibName14=microchip
-LibName15=analog_switches
-LibName16=motorola
-LibName17=texas
-LibName18=intel
-LibName19=audio
-LibName20=interface
-LibName21=digital-audio
-LibName22=philips
-LibName23=display
-LibName24=cypress
-LibName25=siliconi
-LibName26=opto
-LibName27=atmel
-LibName28=contrib
-LibName29=valves
-LibName30=cmos_ieee
-LibName31=/Users/petehartman/Documents/kicad/library/petelib
+LibDir=

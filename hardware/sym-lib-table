@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name trigger-seq-rescue)(type Legacy)(uri ${KIPRJMOD}/trigger-seq-rescue.lib)(options "")(descr ""))
+  (lib (name petelib)(type Legacy)(uri /Users/petehartman/Documents/kicad/library/petelib.lib)(options "")(descr ""))
+  (lib (name altconnector)(type Legacy)(uri /Users/petehartman/Documents/kicad/library/altconnector.lib)(options "")(descr ""))
+)
