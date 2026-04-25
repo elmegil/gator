@@ -10,6 +10,7 @@
  * revised/verified for 3.0 PCB and 16F15345 starting Jun 11, 2023
  *  - implemented length of sequence 2023/06/19
  *  - swing is in progress 2023/06/20
+ * revised, bugs corrected, etc with assistance of Claude 2026/04/24
  */
 
 // PIC16F15345 Configuration Bit Settings
@@ -54,8 +55,9 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
-#include <stdio.h>
-#include <stdlib.h>
+// stdio/stdlib not needed
+//#include <stdio.h>
+//#include <stdlib.h>
 #include <xc.h>
 #include <pic16f15345.h>
 
@@ -78,8 +80,8 @@
 // inputs
 #define runstop RA2
 #define updown RA4
-#define reset RA5      // not found????
-#define mode RC1       // 2x8, 1x16
+#define reset RA5 
+#define mode_sw RC1    // read pin for mode state
 #define ckout RC0
 #define intclk RC2     // this is not ready to use
 
@@ -98,11 +100,10 @@
 #define swing 0b00111101
 #define ADGO  0b00000010
 
-// 225 -> 256 with prescaler of 256 gives roughly 1ms resolution on timer 0
-// need to validate
+// 225 -> 256 with prescaler of 64 gives roughly 1ms resolution on timer 0
 #define TM0COUNT 225
-// needed for __delay functions
-// 16F88 max is 8MHz, that's what this is coded for
+//  vvv needed for __delay functions
+// 16F88 max is 8MHz, that's what this was originally coded for
 // 16F15345 can go up to 32MHz, should try after getting the basics working
 #define _XTAL_FREQ 8000000
 
@@ -112,12 +113,14 @@
 
 // globals
 unsigned int  clock0 = 0;  // has to be global for interrupt routine
-unsigned long duty = 0;    // needs to be long to deal with overflow in mapping to same scale as clock
+unsigned int  duty = 0;    // unsigned int here, but calculations done in long to avoid overflow
 unsigned int  period = 0;
 signed char   row = 0;
 signed char   increment = 1;
-unsigned char column = 1;  // which column is enabled? BIT MASK 01 10 or 11, i.e. 1st, 2nd, or both
-unsigned char last = 8;    // start with full 8 steps
+unsigned char column = 1;  // if mode is 1x16, which column are we in, 1 or 2?
+unsigned char col_bits = 1; // just to start, will get assigned 1 2 or 3 later
+signed char   last = 8;    // start with full 8 steps
+unsigned char mode_state = 0; // 0=2x8, 1=1x16, maintained by main
 unsigned long offset = 0;  // "swing" will offset the start of every other period
 signed char   evenodd = 1; // evenodd keeps track of what beat this is, only odd beats get shifted
 
@@ -152,7 +155,7 @@ signed char   evenodd = 1; // evenodd keeps track of what beat this is, only odd
 // defines the response curve of the speed pot; values are just clock ticks
 // at the fast end probably need to clamp at 8
 
-const int curve[1024] = {    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
+const unsigned int curve[1024] = {    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
                              8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
                              8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
                              8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
@@ -221,10 +224,10 @@ const int curve[1024] = {    8,    8,    8,    8,    8,    8,    8,    8,    8, 
 
 void Init_PIC(void) { // commented out bits are from previous part number 16F88
 //    OSCCON     = 0b01111100; //osc  8 MHz, primary sys clock, frequency tsable, osc mode defined by FOSC above
-    OSCFRQ     = 0b00000101; // 011 is 8MHz clock // 12MHz is 100, 16MHz is 101, 32MHz is 110
+    OSCFRQ     = 0b00000011; // 011 is 8MHz clock // 12MHz is 100, 16MHz is 101, 32MHz is 110
     PMD0       = 0b00000110; // disable modules at a higher level; disable NVM & CLKRef
     PMD1       = 0b10000110; // disable NCO, TMR1 & TMR2
-    PMD2       = 0b01000111; // disable ADC, CMP2, CMP1, ZCD (zero cross detection)
+    PMD2       = 0b01000111; // disable DAC1, CMP2, CMP1, ZCD (zero cross detection)
     PMD3       = 0b00111111; // disable PWMs and CCPs
     PMD4       = 0b11010001; // disable UARTS, MSSP (serial port), CWG (complementary waveform)
     PMD5       = 0b00011110; // disable config logic cells
@@ -249,7 +252,7 @@ void Init_PIC(void) { // commented out bits are from previous part number 16F88
 void Init_interrupts(void) {
     INTCON    &= 0b01111111; // ensure GIE is cleared
     T0CON0     = 0b10000000;  // enable, 8-bit timer, post scaler of 1:1
-    T0CON1     = 0b01000101;  // clock source Fosc/4, sync to Fosc/4, prescaler 1:32
+    T0CON1     = 0b01000110;  // clock source Fosc/4, sync to Fosc/4, prescaler 1:64
     PIE0      &= 0b11011111;  // disable the interrupt
     PIR0      &= 0b11011111;  // clear the flag
     TMR0L      = TM0COUNT;
@@ -257,7 +260,8 @@ void Init_interrupts(void) {
     INTCON    |= 0b10000000;
 }
 
-
+/* test routines if I need them again
+// needs adjusting for changes to column vs mode ?
 void Pulse_bit(unsigned char loc, unsigned char mybit, unsigned char column) {
     loc = (~loc) & 0x07; // what bit position 0 - 7 aka LEDs 1-8; inverting for transistor drivers, masking AFTER inversion
     column &= 0x03;
@@ -275,11 +279,14 @@ void Set_bits(unsigned char col, unsigned char value) {
         PORTC = (unsigned char)((current)|((col)<<6)|((~bitnum)&0x7)<<3);
     }
 }
+ */
+  
 
 void __interrupt() ISR(void) {
-    INTCON    &= 0b01111111; // clear GIE
+    // INTCON    &= 0b01111111; // clear GIE << already handle by the HW
+    TMR0L = TM0COUNT;   // top of ISR improves tempo behavior -- claude advice; previously was at end
     if ((PIE0 & PIR0 & 0b00100000) != 0) { // we have a timer 0 interrupt
-        PIE0      &= 0b11011111; // disable the interrupt
+//        PIE0      &= 0b11011111; // disable the interrupt
         clock0++;
         // normally this would be a bad idea, and the variability of the cycles here is a bit of a problem
         // but this works way better than having all these in the main loop
@@ -289,54 +296,65 @@ void __interrupt() ISR(void) {
                     evenodd = (evenodd == 1) ? -1 : 1; 
                     clock0 = 0;
                     row += increment;
-                    // there has got to be a simpler way to do vvvv this
-                    if (column == 3) {  // 2 x 8 mode, both columns active
-                        if ((row >= last) || (row <= -1)) { 
+
+                    // simpler than first attempt
+                    if (mode_state == 0) {      // 2x8 mode
+                        if ((row >= last) || (row <= -1)) { // overflow
                             if (row >= last) {
                                 row = 0;
-                            } else {
+                            } else {                        // underflow going backwards
                                 row = last-1;
                             }
                         }
-                    } else if (column == 1) { // first column, 16 steps
-                        if (row >= MIN(8,last)) {
+                    } else if (column == 1) {       // 1x16 mode, 1st column
+                        if (row >= MIN(8,last)) {   // overflow in first column
                             column = (last <= 8) ? 1 : 2;
                             row = 0;
-                        } else if (row <= -1) {
+                        } else if (row <= -1) {     // underflow in first column
                             column = (last <= 8) ? 1 : 2;
                             row = (last <= 8) ? (last - 1) : (last - 9);
                         }
-                    } else { // column == 2 & 16 steps; we're in the second column, last > 8 always, otherwise we would be in column 1
-                        if ((8 + row) >= last) {
+                    } else {                        // 1x16 mode, 2nd column
+                        if ((8 + row) >= last) {    // overflow in second column
                             column = 1;
                             row = 0;
-                        } else if (row <= -1) {
+                        } else if (row <= -1) {     // underflow in second column
                             column = 1;
                             row = 7; // this is correct for going backward into the first column
                         }
-                    } // end of column/position manipulation
-                    // I'm using transistor buffers which invert the signals
-                    // so we pre-invert -- ~row -- before adding to PORTC
+                    }
+                    // end of column/position manipulation
+                    col_bits = (mode_state == 0) ? 3 : column;
                 }
-                if (clock0 > (duty)) {
-                    PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 0);
-                } else {
-                    PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 1);
-                }
+                // I'm using transistor buffers which invert the signals
+                // so we pre-invert -- ~row -- before adding to PORTC
+                unsigned char portc_base = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6));
+                PORTC = portc_base | (clock0 <= duty ? 1 : 0);  // 1 is gate on, 0 is gate off
             } else { // not running, no clocking!
-                PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 1);   // but leave it lit to ensure we know where we are
+                PORTC = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6) | 1);   // but leave it lit to ensure we know where we are
                 clock0 = 10200; // restart the clock
             }
         } else {  // held in reset, no clocking! and not lit
             PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 0);   // we don't want reset to tell us where we are
-            clock0 = 10200; // restart the clock, 1020 will always be > period
-            row = (updown == 1) ? last : -1;
-            column = (updown == 1) ? 2 : 1;
+            clock0 = 10200; // restart the clock, 10200 will always be > period
+//            row = (updown == 1) ? last : -1;
+//            column = (updown == 1) ? 2 : 1;
+            if (updown == 1) { // backward
+                if (mode_state ==1 && last > 8) { // 1x16, need second column
+                    row = last - 8;
+                    column = 2;
+                } else {  // 2x8 or 1x16 column one
+                    row = last;
+                    column = 1;
+                }
+            } else { //forward
+                row = -1;
+                column = 1;
+            }
             evenodd = 1; 
         }
         PIR0      &= 0b11011111; // reset the interrupt
-        TMR0L = TM0COUNT;
-        PIE0      |= 0b00100000; // enable the interrupt
+//        PIE0      |= 0b00100000; // enable the interrupt
     }
     INTCON    |= 0b10000000; // set GIE
 }
@@ -364,24 +382,30 @@ void main(void) {
     Init_PIC();
     Init_interrupts();
     for (;;) {
-        period = curve[Acquire(rate)]; // pots are wired with +5V at ccw and gnd at cw    
-        duty = (int)(((long)(1023 - Acquire(width)) * (long)period)/1023);  // this overflows standard int! <<< need to revise this algorithm?
+        unsigned int new_period = curve[Acquire(rate)]; // pots are wired with +5V at ccw and gnd at cw    
+        unsigned int new_duty = (unsigned int)(((unsigned long)(1023 - Acquire(width)) * (unsigned long)new_period)/1023);  
+        INTCON &= 0b01111111; // block interrupts for multi-byte operations
+        period = new_period;
+        duty = new_duty;
         if (duty < 4) duty = 4;
         if (duty > (period - 4)) duty = period - 4; // minimum 1ms pulse either end with variable duty
+        INTCON |= 0b10000000; // unblock interrupts
         // digital inputs
         increment = (updown == 1) ? -1 : 1;
-        if (mode == 0) {
-            column = 3;
-        } else if (column == 3) { // mode is 1 but it had been 0 because column is 3
-            column = 1; // this assumes switching to 1x16 should always continue from the current point left column
+
+        unsigned char new_mode = mode_sw;
+        if (new_mode != mode_state) {
+            if (new_mode == 1) column = 1;  // entering 1x16, aleays start in column 1
+            mode_state = new_mode;          // note we don't move the *row*
         }
-        // handle steps -- current implementation goes weird with 16 steps
-        last = ((1023 - Acquire(steps))>>6)+1; // without +1 it never gets to 8 steps
-        if (column == 3) {
+ 
+        // handle steps 
+        last = (signed char)(((1023 - Acquire(steps))>>6)+1); // without +1 it never gets to 8 steps
+        if (mode_state  == 0) {
             last = last>>1;
         }
         // need to handle swing
-        offset = (int)(((long)(1023 - Acquire(swing)) * (long)period)/2046); // % of period/2, so div by 2046 instead of 1023
+        offset = (((unsigned long)(1023 - Acquire(swing)) * (unsigned long)period)/2046); // % of period/2, so div by 2046 instead of 1023
         if (offset > (period - 8)) offset = period - 8; // ?? 4 == 1ms (maybe) 8 is minimum period
     }
 }
