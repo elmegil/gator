@@ -225,6 +225,7 @@ void Init_PIC(void) { // commented out bits are from previous part number 16F88
     INTCON     = 0b00000001; // disable interrupts; set interrupt to rising edge
     TRISA      = 0b00110100; //port directions; outputs are 0 inputs are 1
     WPUA       = 0b00110100; // weak pull ups for the input bits
+    WPUC       = 0b00000100; // RC2 is clock in, pull it up as well
     TRISB      = 0b11110000; 
     TRISC      = 0b00000110; 
     ANSELA     = 0b00000000; //analog select 0 == digital, 1 == analog for A, bits 3,6,7 unused
@@ -363,17 +364,27 @@ void main(void) {
     Init_PIC();
     Init_interrupts();
     for (;;) {
-        unsigned int new_period = curve[Acquire(rate)]; // pots are wired with +5V at ccw and gnd at cw    
-        unsigned int new_duty = (unsigned int)(((unsigned long)(1023 - Acquire(width)) * (unsigned long)new_period)/1023);  
+        unsigned int new_period = curve[Acquire(rate)]; // pots are wired with +5V at ccw and gnd at cw
+        unsigned int new_duty = (unsigned int)(((unsigned long)(1023 - Acquire(width)) * (unsigned long)new_period)/1023);
         signed int new_offset = (signed int)((unsigned long)(1023 - Acquire(swing)) * (unsigned long)new_period / 2558); // (swing / 2.5) maps 0 - 409, * (period / 1023) == offset; re-arranging fractions gives (swing * period / 2558)
+        // precompute adjusted duty for both swing phases outside INTCON -- slow multiply/divide
+        // inside the interrupt-disabled block was causing ISR jitter that affected tempo
+        signed int pos_offset = new_offset;
+        signed int neg_offset = -new_offset;
+        unsigned int adj_duty_pos = (unsigned int)((signed int)new_duty + (signed int)((signed long)new_duty * pos_offset / (signed int)new_period));
+        unsigned int adj_duty_neg = (unsigned int)((signed int)new_duty + (signed int)((signed long)new_duty * neg_offset / (signed int)new_period));
         INTCON &= 0b01111111; // block interrupts for multi-byte operations
         period = new_period;
-        offset = (signed int)(evenodd * new_offset);
-        // this does all duty since offset handles the sign for increase/decrease
-        duty = (unsigned int)((signed int)new_duty + (signed int)((signed long)new_duty * (signed long)offset / (signed int)period));
-        if (duty < 4) duty = 4;
+        if (evenodd == 1) {
+            offset = pos_offset;
+            duty = adj_duty_pos;
+        } else {
+            offset = neg_offset;
+            duty = adj_duty_neg;
+        }
         signed int eff_period = (signed int)period + offset;
-        if ((signed int)duty > (eff_period - 4)) duty = (unsigned int)(eff_period - 4); // minimum 1ms pulse either end with variable duty     
+        if ((signed int)duty < 4) duty = 4;
+        if ((signed int)duty > (eff_period - 4)) duty = (unsigned int)(eff_period - 4); // minimum 1ms pulse either end with variable duty
         INTCON |= 0b10000000; // unblock interrupts
         // digital inputs
         increment = (updown == 1) ? -1 : 1;
