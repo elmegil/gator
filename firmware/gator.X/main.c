@@ -348,10 +348,12 @@ void main(void) {
         signed int new_offset = (signed int)((unsigned long)(1023 - Acquire(swing)) * (unsigned long)new_period / 2558); // (swing / 2.5) maps 0 - 409, * (period / 1023) == offset; re-arranging fractions gives (swing * period / 2558)
         INTCON &= 0b01111111; // block interrupts for multi-byte operations
         period = new_period;
-        duty = new_duty;
         offset = (signed int)(evenodd * new_offset);
+        // this does all duty since offset handles the sign for increase/decrease
+        duty = (unsigned int)((signed int)new_duty + (signed int)((signed long)new_duty * (signed long)offset / (signed int)period));
         if (duty < 4) duty = 4;
-        if (duty > (period - 4)) duty = period - 4; // minimum 1ms pulse either end with variable duty     
+        signed int eff_period = (signed int)period + offset;
+        if ((signed int)duty > (eff_period - 4)) duty = (unsigned int)(eff_period - 4); // minimum 1ms pulse either end with variable duty     
         INTCON |= 0b10000000; // unblock interrupts
         // digital inputs
         increment = (updown == 1) ? -1 : 1;
