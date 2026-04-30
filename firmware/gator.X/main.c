@@ -109,6 +109,8 @@ signed char   last = 8;    // start with full 8 steps
 unsigned char mode_state = 0; // 0=2x8, 1=1x16, maintained by main
 signed int offset = 0;   // "swing" will be an offset added or subtracted from period length
 signed char   evenodd = 1; // evenodd keeps track of what beat this is, only odd beats get shifted
+unsigned char last_clk_state = 0; // previous state of intclk for edge detection
+unsigned int  extclk_timeout = 0; // nonzero while external clock is considered present
 
 
 // have to bite the bullet and make a table lookup for mapping the pot curves.
@@ -253,10 +255,28 @@ void __interrupt() ISR(void) {
         clock0++;
         // normally this would be a bad idea, and the variability of the cycles here is a bit of a problem
         // but this works way better than having all these in the main loop
+        // track clock input state even while stopped to avoid spurious edge on start
+        unsigned char cur_clk = intclk;
+        unsigned char edge = (cur_clk && !last_clk_state);
+        last_clk_state = cur_clk;
+
         if (reset == 1) { // 1 is "not reset"; reset processed outside run/stop so that reset still has an effect when stopped
             if (runstop == 1) { // we are running!
-                if (clock0 >= (unsigned int)((int)period+offset)) { // clock period restarts  // concerned whether this will cause long delay at startup for slow clocks
-                    evenodd = (evenodd == 1) ? -1 : 1; 
+                unsigned char advance_step = 0;
+
+                if (edge) {
+                    extclk_timeout = 10000;  // ~10 seconds at 1ms/tick
+                    advance_step = 1;
+                }
+                if (extclk_timeout > 0) extclk_timeout--;
+
+                // internal clock only fires when no external clock present
+                if (extclk_timeout == 0 && clock0 >= (unsigned int)((int)period+offset)) {
+                    advance_step = 1;
+                }
+
+                if (advance_step) {
+                    evenodd = (evenodd == 1) ? -1 : 1;
                     clock0 = 0;
                     row += increment;
 
