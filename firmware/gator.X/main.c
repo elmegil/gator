@@ -55,19 +55,9 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
-// stdio/stdlib not needed
-//#include <stdio.h>
-//#include <stdlib.h>
 #include <xc.h>
 #include <pic16f15345.h>
 
-// pin to register bit reminder for the PIC16F88
-// register A LSB to MSB = 17 18 1 2 3 4 15 16
-// register B LSB to MSB = 6 7 8 9 10 11 12 13
-//
-// except now I'm using PIC16F15345...
-//
-  
 // defines for my purposes
 // 4051 address pins
 #define addrA RC3
@@ -90,13 +80,9 @@
 // go bit should not be done same time as on/off per data sheet
 // so leaving those bits 0 until I explicitly set them
 // for 16F15345, bits are different: ADGO bit is in a different place, clock source is in ADCON1
-// RB5 = 001101
 #define rate  0b00110101
-// RB4 = 001100
 #define width 0b00110001
-// RB6 = 001110
 #define steps 0b00111001
-// RB7 = 001111
 #define swing 0b00111101
 #define ADGO  0b00000010
 
@@ -104,7 +90,7 @@
 #define TM0COUNT 225
 //  vvv needed for __delay functions
 // 16F88 max is 8MHz, that's what this was originally coded for
-// 16F15345 can go up to 32MHz, should try after getting the basics working
+// 16F15345 can go up to 32MHz, might try after getting the basics working
 #define _XTAL_FREQ 8000000
 
 // no builtin, need this in the ISR so using a macro.  Yes I know this isn't the BEST way to do it
@@ -121,7 +107,7 @@ unsigned char column = 1;  // if mode is 1x16, which column are we in, 1 or 2?
 unsigned char col_bits = 1; // just to start, will get assigned 1 2 or 3 later
 signed char   last = 8;    // start with full 8 steps
 unsigned char mode_state = 0; // 0=2x8, 1=1x16, maintained by main
-unsigned long offset = 0;  // "swing" will offset the start of every other period
+signed int offset = 0;   // "swing" will be an offset added or subtracted from period length
 signed char   evenodd = 1; // evenodd keeps track of what beat this is, only odd beats get shifted
 
 
@@ -260,39 +246,16 @@ void Init_interrupts(void) {
     INTCON    |= 0b10000000;
 }
 
-/* test routines if I need them again
-// needs adjusting for changes to column vs mode ?
-void Pulse_bit(unsigned char loc, unsigned char mybit, unsigned char column) {
-    loc = (~loc) & 0x07; // what bit position 0 - 7 aka LEDs 1-8; inverting for transistor drivers, masking AFTER inversion
-    column &= 0x03;
-    mybit &= 0x01;
-    PORTC = (unsigned char)(((loc)<<3) | ((column)<<6) | mybit ); // set location as RC3,4,5, inhibit is RC6,7, clock is mybit
-    __delay_ms(50);
-    PORTC = (unsigned char)(((loc)<<3) | ((column)<<6) );
-    __delay_ms(50);
-}
-
-void Set_bits(unsigned char col, unsigned char value) {
-    unsigned char current;
-    for (unsigned char bitnum=0; bitnum<8; bitnum++) {
-        current = ((value)>>bitnum) & 0b00000001; // shift to the bit then strip it to just the bit
-        PORTC = (unsigned char)((current)|((col)<<6)|((~bitnum)&0x7)<<3);
-    }
-}
- */
-  
 
 void __interrupt() ISR(void) {
-    // INTCON    &= 0b01111111; // clear GIE << already handle by the HW
     TMR0L = TM0COUNT;   // top of ISR improves tempo behavior -- claude advice; previously was at end
     if ((PIE0 & PIR0 & 0b00100000) != 0) { // we have a timer 0 interrupt
-//        PIE0      &= 0b11011111; // disable the interrupt
         clock0++;
         // normally this would be a bad idea, and the variability of the cycles here is a bit of a problem
         // but this works way better than having all these in the main loop
         if (reset == 1) { // 1 is "not reset"; reset processed outside run/stop so that reset still has an effect when stopped
             if (runstop == 1) { // we are running!
-                if (clock0 >= (period)) { // clock period restarts  // concerned whether this will cause long delay at startup for slow clocks
+                if (clock0 >= (unsigned int)((int)period+offset)) { // clock period restarts  // concerned whether this will cause long delay at startup for slow clocks
                     evenodd = (evenodd == 1) ? -1 : 1; 
                     clock0 = 0;
                     row += increment;
@@ -331,14 +294,13 @@ void __interrupt() ISR(void) {
                 unsigned char portc_base = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6));
                 PORTC = portc_base | (clock0 <= duty ? 1 : 0);  // 1 is gate on, 0 is gate off
             } else { // not running, no clocking!
+                col_bits = (mode_state == 0) ? 3 : column;  
                 PORTC = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6) | 1);   // but leave it lit to ensure we know where we are
                 clock0 = 10200; // restart the clock
             }
         } else {  // held in reset, no clocking! and not lit
             PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 0);   // we don't want reset to tell us where we are
             clock0 = 10200; // restart the clock, 10200 will always be > period
-//            row = (updown == 1) ? last : -1;
-//            column = (updown == 1) ? 2 : 1;
             if (updown == 1) { // backward
                 if (mode_state ==1 && last > 8) { // 1x16, need second column
                     row = last - 8;
@@ -354,7 +316,6 @@ void __interrupt() ISR(void) {
             evenodd = 1; 
         }
         PIR0      &= 0b11011111; // reset the interrupt
-//        PIE0      |= 0b00100000; // enable the interrupt
     }
     INTCON    |= 0b10000000; // set GIE
 }
@@ -384,64 +345,26 @@ void main(void) {
     for (;;) {
         unsigned int new_period = curve[Acquire(rate)]; // pots are wired with +5V at ccw and gnd at cw    
         unsigned int new_duty = (unsigned int)(((unsigned long)(1023 - Acquire(width)) * (unsigned long)new_period)/1023);  
+        signed int new_offset = (signed int)((unsigned long)(1023 - Acquire(swing)) * (unsigned long)new_period / 2558); // (swing / 2.5) maps 0 - 409, * (period / 1023) == offset; re-arranging fractions gives (swing * period / 2558)
         INTCON &= 0b01111111; // block interrupts for multi-byte operations
         period = new_period;
         duty = new_duty;
+        offset = (signed int)(evenodd * new_offset);
         if (duty < 4) duty = 4;
-        if (duty > (period - 4)) duty = period - 4; // minimum 1ms pulse either end with variable duty
+        if (duty > (period - 4)) duty = period - 4; // minimum 1ms pulse either end with variable duty     
         INTCON |= 0b10000000; // unblock interrupts
         // digital inputs
         increment = (updown == 1) ? -1 : 1;
 
         unsigned char new_mode = mode_sw;
         if (new_mode != mode_state) {
-            if (new_mode == 1) column = 1;  // entering 1x16, aleays start in column 1
+            if (new_mode == 1) column = 1;  // entering 1x16, always start in column 1
             mode_state = new_mode;          // note we don't move the *row*
         }
- 
         // handle steps 
         last = (signed char)(((1023 - Acquire(steps))>>6)+1); // without +1 it never gets to 8 steps
         if (mode_state  == 0) {
             last = last>>1;
         }
-        // need to handle swing
-        offset = (((unsigned long)(1023 - Acquire(swing)) * (unsigned long)period)/2046); // % of period/2, so div by 2046 instead of 1023
-        if (offset > (period - 8)) offset = period - 8; // ?? 4 == 1ms (maybe) 8 is minimum period
     }
 }
-
-// old junk test code
-
-//    for (;;){
-//        for (int j=1; j<4; j++) {
-//            for (int i=0; i<8; i++) {
-//                Pulse_bit(i, 1, j);
-//                __delay_ms(100);
-//            }
-//        }
-//        period = curve[Acquire(rate)];
-//        Pulse_bit((period>>10), 1, 2);
-//        __delay_ms(20);
-//        duty = Acquire(width);
-//        Pulse_bit((duty>>7), 1, 1);
-//        __delay_ms(100);
-//        for (int i = 0; i<256; i++){
-//            Set_bits(1, i);
-//            __delay_ms(10);
-//        }
-//        __delay_ms(100);
-//        Pulse_bit(0, 1, 1);
-//        __delay_ms(100);
-        // period scales from 2 to 10232
-//        if (reset == 1) {
-//            Pulse_bit(7,1,2);
-//        }
-//        if (mode == 1) {
-//            Pulse_bit(6,1,2);
-//        }
-//        if (runstop == 1) {
-//            Pulse_bit(5,1,2);
-//        }
-//        if (updown == 1) {
-//            Pulse_bit(4,1,2);
-//        }
