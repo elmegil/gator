@@ -10,7 +10,7 @@
  * revised/verified for 3.0 PCB and 16F15345 starting Jun 11, 2023
  *  - implemented length of sequence 2023/06/19
  *  - swing is in progress 2023/06/20
- * revised, bugs corrected, etc with assistance of Claude 2026/04/24
+ * revised, bugs corrected, etc with assistance of Claude 2026/04/24 - 2026/04/30
  */
 
 // PIC16F15345 Configuration Bit Settings
@@ -107,7 +107,7 @@ unsigned char column = 1;  // if mode is 1x16, which column are we in, 1 or 2?
 unsigned char col_bits = 1; // just to start, will get assigned 1 2 or 3 later
 signed char   last = 8;    // start with full 8 steps
 unsigned char mode_state = 0; // 0=2x8, 1=1x16, maintained by main
-signed int offset = 0;   // "swing" will be an offset added or subtracted from period length
+signed int    offset = 0;   // "swing" will be an offset added or subtracted from period length
 signed char   evenodd = 1; // evenodd keeps track of what beat this is, only odd beats get shifted
 unsigned char last_clk_state = 0; // previous state of intclk for edge detection
 unsigned int  extclk_timeout = 0; // nonzero while external clock is considered present
@@ -366,7 +366,8 @@ void main(void) {
     for (;;) {
         unsigned int new_period = curve[Acquire(rate)]; // pots are wired with +5V at ccw and gnd at cw
         unsigned int new_duty = (unsigned int)(((unsigned long)(1023 - Acquire(width)) * (unsigned long)new_period)/1023);
-        signed int new_offset = (signed int)((unsigned long)(1023 - Acquire(swing)) * (unsigned long)new_period / 2558); // (swing / 2.5) maps 0 - 409, * (period / 1023) == offset; re-arranging fractions gives (swing * period / 2558)
+        // (swing / 2.5) maps 0 - 409, * (period / 1023) == offset; re-arranging fractions gives (swing * period / 2558)
+        signed int new_offset = (signed int)((unsigned long)(1023 - Acquire(swing)) * (unsigned long)new_period / 2558); 
         // precompute adjusted duty for both swing phases outside INTCON -- slow multiply/divide
         // inside the interrupt-disabled block was causing ISR jitter that affected tempo
         signed int pos_offset = new_offset;
