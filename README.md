@@ -11,7 +11,3 @@ Controls:
 - clock in + clock out (external clock is reflected on the output and overrides internal tempo)
 - 1x16 or 2x8 operation -- in 1x16 both outputs reflect the same
 - each step has a switch that indicates if there should be a gate out on that step or not.
-
-
-To Do:
-need to redo the layout so it is not so cramped.  Particularly the pots are really too close together even using Davies knobs
