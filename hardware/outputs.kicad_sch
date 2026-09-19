@@ -4,6 +4,15 @@
 
   (paper "A4")
 
+  (title_block
+    (title "Gator Trigger Sequencer")
+    (date "2026-09-19")
+    (rev "3.4")
+    (company "Frogleg Synthesis")
+    (comment 1 "includes width, length, rate, swing, 1x16 or 2x8, run/stop, fwd/back, reset")
+    (comment 2 "simple trigger sequencer")
+  )
+
   (lib_symbols
     (symbol "Device:D" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
       (property "Reference" "D" (id 0) (at 0 2.54 0)

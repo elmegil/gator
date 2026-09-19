@@ -5,9 +5,12 @@
   (paper "A4")
 
   (title_block
-    (title "Trigger Sequencer")
+    (title "Gator Trigger Sequencer")
+    (date "2026-09-19")
+    (rev "3.4")
     (company "Frogleg Synthesis")
-    (comment 1 "simple trigger sequencer to go with the 808 boards")
+    (comment 1 "includes width, length, rate, swing, 1x16 or 2x8, run/stop, fwd/back, reset")
+    (comment 2 "simple trigger sequencer")
   )
 
   (lib_symbols

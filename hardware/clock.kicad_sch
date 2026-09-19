@@ -4,6 +4,15 @@
 
   (paper "A4")
 
+  (title_block
+    (title "Gator Trigger Sequencer")
+    (date "2026-09-19")
+    (rev "3.4")
+    (company "Frogleg Synthesis")
+    (comment 1 "includes width, length, rate, swing, 1x16 or 2x8, run/stop, fwd/back, reset")
+    (comment 2 "simple trigger sequencer")
+  )
+
   (lib_symbols
     (symbol "Comparator:LM393" (pin_names (offset 0.127)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (id 0) (at 3.81 3.81 0)
@@ -1954,7 +1963,7 @@
     (effects (font (size 1.524 1.524)) (justify left bottom))
     (uuid 6b697eef-8145-4026-af5e-0ae5ca0d6409)
   )
-  (text "A mono plug will short ring to ground\ntaking advantage of this to identify when\na clock in plug is present\nCan use RA3 pin dual use with programming Vpp\nbecause Vpp must be 8V or higher to program the chip"
+  (text "A mono plug will short ring to ground\ntaking advantage of this to identify when\na clock in plug is present\nCan use RA3 pin dual use with programming Vpp\nbecause not doing LVP and MCLRE is disabled"
     (at 15.24 55.88 0)
     (effects (font (size 1.524 1.524)) (justify left bottom))
     (uuid 781f0f4c-f5c4-4495-ad03-f9b676c9b2a3)
