@@ -24,7 +24,7 @@
 #pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enable bit (FSCM timer enabled)
 
 // CONFIG2
-#pragma config MCLRE = ON       // Master Clear Enable bit (MCLR pin is Master Clear function)
+#pragma config MCLRE = OFF      // Master Clear Enable bit (MCLR pin is Master Clear function; required for ICSP); apparently NOT required for ICSP unless doing LVP?
 #pragma config PWRTE = ON       // Power-up Timer Enable bit (PWRT enabled)
 #pragma config LPBOREN = OFF    // Low-Power BOR enable bit (ULPBOR disabled)
 #pragma config BOREN = OFF      // Brown-out reset enable bits (Brown-out reset disabled)
@@ -48,6 +48,7 @@
 #pragma config WRTC = OFF       // Configuration Register Write Protection bit (Configuration Register not write protected)
 #pragma config WRTSAF = OFF     // Storage Area Flash Write Protection bit (SAF not write protected)
 #pragma config LVP = OFF        // Low Voltage Programming Enable bit (High Voltage on MCLR/Vpp must be used for programming)
+// chip uses Vpp == VIHH == 8 .. 9V for programming; will also reuse the pin for clock detection
 
 // CONFIG5
 #pragma config CP = OFF         // UserNVM Program memory code protection bit (UserNVM code protection disabled)
@@ -73,7 +74,8 @@
 #define reset RA5 
 #define mode_sw RC1    // read pin for mode state
 #define ckout RC0
-#define intclk RC2     // this is not ready to use
+#define intclk RC2    
+#define clkpresent RA3 // doubling up on Vpp pin
 
 // ADC acquire bytes in adcon0
 // which input, "go" bit, unused, on/off for AD function
@@ -109,8 +111,6 @@ signed char   last = 8;    // start with full 8 steps
 unsigned char mode_state = 0; // 0=2x8, 1=1x16, maintained by main
 signed int    offset = 0;   // "swing" will be an offset added or subtracted from period length
 signed char   evenodd = 1; // evenodd keeps track of what beat this is, only odd beats get shifted
-unsigned char last_clk_state = 0; // previous state of intclk for edge detection
-unsigned int  extclk_timeout = 0; // nonzero while external clock is considered present
 
 
 // have to bite the bullet and make a table lookup for mapping the pot curves.
@@ -223,8 +223,8 @@ void Init_PIC(void) { // commented out bits are from previous part number 16F88
     CCP2CON    = 0b00000000; // disable comparator modules
     SSP1CON1   = 0b00000000; // disable Serial port (bit 5 = 0) (used for I2C/SPI)
     INTCON     = 0b00000001; // disable interrupts; set interrupt to rising edge
-    TRISA      = 0b00110100; //port directions; outputs are 0 inputs are 1
-    WPUA       = 0b00110100; // weak pull ups for the input bits
+    TRISA      = 0b00111100; //port directions; outputs are 0 inputs are 1; bit3=RA3/clkpresent input
+    WPUA       = 0b00111100; // weak pull ups for the input bits; RA3 pulled high = no cable
     WPUC       = 0b00000100; // RC2 is clock in, pull it up as well
     TRISB      = 0b11110000; 
     TRISC      = 0b00000110; 
@@ -242,103 +242,111 @@ void Init_interrupts(void) {
     INTCON    &= 0b01111111; // ensure GIE is cleared
     T0CON0     = 0b10000000;  // enable, 8-bit timer, post scaler of 1:1
     T0CON1     = 0b01000110;  // clock source Fosc/4, sync to Fosc/4, prescaler 1:64
-    PIE0      &= 0b11011111;  // disable the interrupt
-    PIR0      &= 0b11011111;  // clear the flag
+    PIE0      &= 0b11001111;  // disable PIE interrupts timer and IOC
+    PIR0      &= 0b11001111;  // clear the flags
     TMR0L      = TM0COUNT;
-    PIE0      |= 0b00100000; // enable the interrupt
-    INTCON    |= 0b10000000;
+    PIE0      |= 0b00100000; // enable timer0 interrupt <<<
+    IOCCP      = 0b00000100; // RC2 positive edge detect
+    IOCCF      = 0b00000000; // clear any pending IOC flags
+    PIE0      |= 0b00010000; // enable IOC interrupts ; was  0b10000000 which is incorrect for this model!!
+    INTCON    |= 0b10000000; // enable global interrupts
 }
 
 
+static void advance_step(void) {
+    evenodd = (evenodd == 1) ? -1 : 1;
+    clock0 = 0;
+    row += increment;
+    if (mode_state == 0) {          // 2x8 mode
+        if ((row >= last) || (row <= -1)) {
+            row = (row >= last) ? 0 : (last - 1);
+        }
+    } else if (column == 1) {       // 1x16 mode, 1st column
+        if (row >= MIN(8,last)) {
+            column = (last <= 8) ? 1 : 2;
+            row = 0;
+        } else if (row <= -1) {
+            column = (last <= 8) ? 1 : 2;
+            row = (last <= 8) ? (last - 1) : (last - 9);
+        }
+    } else {                        // 1x16 mode, 2nd column
+        if ((8 + row) >= last) {
+            column = 1;
+            row = 0;
+        } else if (row <= -1) {
+            column = 1;
+            row = 7;
+        }
+    }
+    col_bits = (mode_state == 0) ? 3 : column;
+}
+
+// old test code, restoring to work with the interrupt issues
+
+void Pulse_bit(unsigned char loc, unsigned char mybit, unsigned char column) {
+    loc = (~loc) & 0x07; // what bit position 0 - 7 aka LEDs 1-8; inverting for transistor drivers, masking AFTER inversion
+    column &= 0x03;
+    mybit &= 0x01;
+    PORTC = (unsigned char)(((loc)<<3) | ((column)<<6) | mybit ); // set location as RC3,4,5, inhibit is RC6,7, clock is mybit
+    __delay_ms(50);
+    PORTC = (unsigned char)(((loc)<<3) | ((column)<<6) );
+    __delay_ms(50);
+}
+
+
+
+
 void __interrupt() ISR(void) {
-    TMR0L = TM0COUNT;   // top of ISR improves tempo behavior -- claude advice; previously was at end
-    if ((PIE0 & PIR0 & 0b00100000) != 0) { // we have a timer 0 interrupt
-        clock0++;
-        // normally this would be a bad idea, and the variability of the cycles here is a bit of a problem
-        // but this works way better than having all these in the main loop
-        // track clock input state even while stopped to avoid spurious edge on start
-        unsigned char cur_clk = intclk;
-        unsigned char edge = (cur_clk && !last_clk_state);
-        last_clk_state = cur_clk;
-
-        if (reset == 1) { // 1 is "not reset"; reset processed outside run/stop so that reset still has an effect when stopped
-            if (runstop == 1) { // we are running!
-                unsigned char advance_step = 0;
-
-                if (edge) {
-                    extclk_timeout = 10000;  // ~10 seconds at 1ms/tick
-                    advance_step = 1;
-                }
-                if (extclk_timeout > 0) extclk_timeout--;
-
-                // internal clock only fires when no external clock present
-                if (extclk_timeout == 0 && clock0 >= (unsigned int)((int)period+offset)) {
-                    advance_step = 1;
-                }
-
-                if (advance_step) {
-                    evenodd = (evenodd == 1) ? -1 : 1;
-                    clock0 = 0;
-                    row += increment;
-
-                    // simpler than first attempt
-                    if (mode_state == 0) {      // 2x8 mode
-                        if ((row >= last) || (row <= -1)) { // overflow
-                            if (row >= last) {
-                                row = 0;
-                            } else {                        // underflow going backwards
-                                row = last-1;
-                            }
-                        }
-                    } else if (column == 1) {       // 1x16 mode, 1st column
-                        if (row >= MIN(8,last)) {   // overflow in first column
-                            column = (last <= 8) ? 1 : 2;
-                            row = 0;
-                        } else if (row <= -1) {     // underflow in first column
-                            column = (last <= 8) ? 1 : 2;
-                            row = (last <= 8) ? (last - 1) : (last - 9);
-                        }
-                    } else {                        // 1x16 mode, 2nd column
-                        if ((8 + row) >= last) {    // overflow in second column
-                            column = 1;
-                            row = 0;
-                        } else if (row <= -1) {     // underflow in second column
-                            column = 1;
-                            row = 7; // this is correct for going backward into the first column
-                        }
-                    }
-                    // end of column/position manipulation
-                    col_bits = (mode_state == 0) ? 3 : column;
-                }
+    if ((PIE0 & PIR0 & 0b00010000) != 0) { // IOC interrupt: external clock rising edge on RC2 ; originally 0b01000000 which is wrong
+        if (IOCCF & 0b00000100) {  // specifically checking for RC2
+            if (reset == 1 && runstop == 1 && !clkpresent) {  // clkpresent is active low
+                advance_step();
                 // I'm using transistor buffers which invert the signals
                 // so we pre-invert -- ~row -- before adding to PORTC
+                PORTC = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6)) | 1;
+            }
+            IOCCF &= ~0b00000100;
+        }
+        PIR0 &= ~0b00010000;
+    }
+    if ((PIE0 & PIR0 & 0b00100000) != 0) { // timer 0 interrupt
+        TMR0L = TM0COUNT;
+        clock0++;
+        if (reset == 1) { // 1 is "not reset"; reset processed outside run/stop so reset works while stopped
+            if (runstop == 1) {
+                if (clkpresent) { // internal clock: advance step on period
+                    if (clock0 >= (unsigned int)((int)period+offset)) {
+                        advance_step();
+                    }
+                }
+                // external clock: step already advanced in IOC handler above
                 unsigned char portc_base = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6));
                 PORTC = portc_base | (clock0 <= duty ? 1 : 0);  // 1 is gate on, 0 is gate off
             } else { // not running, no clocking!
-                col_bits = (mode_state == 0) ? 3 : column;  
-                PORTC = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6) | 1);   // but leave it lit to ensure we know where we are
-                clock0 = 10200; // restart the clock
+                col_bits = (mode_state == 0) ? 3 : column;
+                PORTC = (unsigned char)(((~row & 0x07)<<3) | ((col_bits & 0x03)<<6) | 1);   // leave it lit so we know where we are
+                clock0 = 10200;
             }
-        } else {  // held in reset, no clocking! and not lit
-            PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 0);   // we don't want reset to tell us where we are
-            clock0 = 10200; // restart the clock, 10200 will always be > period
+        } else {  // held in reset, not lit
+            PORTC = (unsigned char)(((~row & 0x07)<<3) | ((column & 0x03)<<6) | 0);
+            clock0 = 10200; // 10200 will always be > period
             if (updown == 1) { // backward
-                if (mode_state ==1 && last > 8) { // 1x16, need second column
+                if (mode_state == 1 && last > 8) {
                     row = last - 8;
                     column = 2;
-                } else {  // 2x8 or 1x16 column one
+                } else {
                     row = last;
                     column = 1;
                 }
-            } else { //forward
+            } else { // forward
                 row = -1;
                 column = 1;
             }
-            evenodd = 1; 
+            evenodd = 1;
         }
-        PIR0      &= 0b11011111; // reset the interrupt
+        PIR0 &= ~0b00100000;
     }
-    INTCON    |= 0b10000000; // set GIE
+    INTCON |= 0b10000000; // set GIE
 }
 
 // see page 231 of datasheet (increasing a bit, hoping to get more stable output)
@@ -374,6 +382,8 @@ void main(void) {
         signed int neg_offset = -new_offset;
         unsigned int adj_duty_pos = (unsigned int)((signed int)new_duty + (signed int)((signed long)new_duty * pos_offset / (signed int)new_period));
         unsigned int adj_duty_neg = (unsigned int)((signed int)new_duty + (signed int)((signed long)new_duty * neg_offset / (signed int)new_period));
+        // is this block causing the jittery response to external clock?
+        // additionally, duty and ext clock don't play well together, need to resolve
         INTCON &= 0b01111111; // block interrupts for multi-byte operations
         period = new_period;
         if (evenodd == 1) {
@@ -402,3 +412,16 @@ void main(void) {
         }
     }
 }
+
+
+
+
+
+
+//void Set_bits(unsigned char col, unsigned char value) {
+//    unsigned char current;
+//    for (unsigned char bitnum=0; bitnum<8; bitnum++) {
+//        current = ((value)>>bitnum) & 0b00000001; // shift to the bit then strip it to just the bit
+//        PORTC = (unsigned char)((current)|((col)<<6)|((~bitnum)&0x7)<<3);
+//    }
+//}

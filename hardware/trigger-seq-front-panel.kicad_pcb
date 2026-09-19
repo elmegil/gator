@@ -134433,7 +134433,7 @@
   (gr_text "serial here" (at 156.975 153.9434) (layer "F.SilkS") (tstamp f49d385e-143a-43d1-871d-6d077b70b4a5)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
-  (gr_text "v3.3" (at 137.5694 154.1212) (layer "F.SilkS") (tstamp f7583ade-db33-45d7-9234-c79bbb9e6179)
+  (gr_text "v3.4" (at 137.5694 154.1212) (layer "F.SilkS") (tstamp f7583ade-db33-45d7-9234-c79bbb9e6179)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
 

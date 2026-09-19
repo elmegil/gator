@@ -388,28 +388,28 @@
       (reference "D2") (unit 1) (value "D_Schottky_Small") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b39df24"
-      (reference "D3") (unit 1) (value "S1") (footprint "My Library:LED_D3.0mm")
+      (reference "D3") (unit 1) (value "S1") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a9762"
-      (reference "D4") (unit 1) (value "S2") (footprint "My Library:LED_D3.0mm")
+      (reference "D4") (unit 1) (value "S2") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a9804"
-      (reference "D5") (unit 1) (value "S3") (footprint "My Library:LED_D3.0mm")
+      (reference "D5") (unit 1) (value "S3") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a98b3"
-      (reference "D6") (unit 1) (value "S4") (footprint "My Library:LED_D3.0mm")
+      (reference "D6") (unit 1) (value "S4") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a9961"
-      (reference "D7") (unit 1) (value "S5") (footprint "My Library:LED_D3.0mm")
+      (reference "D7") (unit 1) (value "S5") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a9c87"
-      (reference "D8") (unit 1) (value "S6") (footprint "My Library:LED_D3.0mm")
+      (reference "D8") (unit 1) (value "S6") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a9d32"
-      (reference "D9") (unit 1) (value "S7") (footprint "My Library:LED_D3.0mm")
+      (reference "D9") (unit 1) (value "S7") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3a9e78"
-      (reference "D10") (unit 1) (value "S8") (footprint "My Library:LED_D3.0mm")
+      (reference "D10") (unit 1) (value "S8") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-0000580dbcbd"
       (reference "D11") (unit 1) (value "1N4148") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
@@ -436,28 +436,28 @@
       (reference "D18") (unit 1) (value "1N4148") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fcc7f"
-      (reference "D19") (unit 1) (value "S9") (footprint "My Library:LED_D3.0mm")
+      (reference "D19") (unit 1) (value "S9") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fce49"
-      (reference "D20") (unit 1) (value "S10") (footprint "My Library:LED_D3.0mm")
+      (reference "D20") (unit 1) (value "S10") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fceea"
-      (reference "D21") (unit 1) (value "S11") (footprint "My Library:LED_D3.0mm")
+      (reference "D21") (unit 1) (value "S11") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fd28a"
-      (reference "D22") (unit 1) (value "S12") (footprint "My Library:LED_D3.0mm")
+      (reference "D22") (unit 1) (value "S12") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fd32e"
-      (reference "D23") (unit 1) (value "S13") (footprint "My Library:LED_D3.0mm")
+      (reference "D23") (unit 1) (value "S13") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fd3d8"
-      (reference "D24") (unit 1) (value "S14") (footprint "My Library:LED_D3.0mm")
+      (reference "D24") (unit 1) (value "S14") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fd482"
-      (reference "D25") (unit 1) (value "S15") (footprint "My Library:LED_D3.0mm")
+      (reference "D25") (unit 1) (value "S15") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b3fd52e"
-      (reference "D26") (unit 1) (value "S16") (footprint "My Library:LED_D3.0mm")
+      (reference "D26") (unit 1) (value "S16") (footprint "myfootprints:LED_D3.0mm")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-0000580e710d"
       (reference "D27") (unit 1) (value "1N4148") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
@@ -511,28 +511,28 @@
       (reference "FB2") (unit 1) (value "Ferrite_Bead_Small") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b39cdba"
-      (reference "J1") (unit 1) (value "OUT1") (footprint "My Library:thonkiconn")
+      (reference "J1") (unit 1) (value "OUT1") (footprint "myfootprints:thonkiconn")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b39d427"
-      (reference "J2") (unit 1) (value "OUT2") (footprint "My Library:thonkiconn")
+      (reference "J2") (unit 1) (value "OUT2") (footprint "myfootprints:thonkiconn")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005d2ed88d"
-      (reference "J3") (unit 1) (value "RESET") (footprint "My Library:thonkiconn")
+      (reference "J3") (unit 1) (value "RESET") (footprint "myfootprints:thonkiconn")
     )
-    (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005d2c85f7"
-      (reference "J4") (unit 1) (value "CLOCK_IN") (footprint "My Library:thonkiconn")
+    (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/920fb179-fdb5-4913-ba97-2b55c937f436"
+      (reference "J4") (unit 1) (value "CKIN") (footprint "myfootprints:thonkiconn_stereo")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005d2dde94"
-      (reference "J5") (unit 1) (value "RUN_STOP") (footprint "My Library:thonkiconn")
+      (reference "J5") (unit 1) (value "RUN_STOP") (footprint "myfootprints:thonkiconn")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005d2df5ad"
-      (reference "J6") (unit 1) (value "UP_DOWN") (footprint "My Library:thonkiconn")
+      (reference "J6") (unit 1) (value "UP_DOWN") (footprint "myfootprints:thonkiconn")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005b288854"
-      (reference "J7") (unit 1) (value "CLOCK_OUT") (footprint "My Library:thonkiconn")
+      (reference "J7") (unit 1) (value "CLOCK_OUT") (footprint "myfootprints:thonkiconn")
     )
     (path "/00000000-0000-0000-0000-000058097be3/00000000-0000-0000-0000-00005b46aace"
-      (reference "P1") (unit 1) (value "MOTM Power") (footprint "My Library:MTA-156")
+      (reference "P1") (unit 1) (value "MOTM Power") (footprint "myfootprints:MTA-156-4")
     )
     (path "/00000000-0000-0000-0000-000058097be3/00000000-0000-0000-0000-00005b466f1d"
       (reference "P2") (unit 1) (value "Euro Power") (footprint "Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical")
@@ -540,8 +540,8 @@
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005cbd7d88"
       (reference "P3") (unit 1) (value "SWITCH_PANEL") (footprint "Connector_PinSocket_2.54mm:PinSocket_2x08_P2.54mm_Vertical")
     )
-    (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005ca2876f"
-      (reference "P4") (unit 1) (value "JACKS_MAIN") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x07_P2.54mm_Vertical")
+    (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/c43663a5-9290-4250-b030-be738442f528"
+      (reference "P4") (unit 1) (value "JACKS_MAIN") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005b2b4fec"
       (reference "P6") (unit 1) (value "pickit header") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical")
@@ -549,8 +549,8 @@
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c5f/00000000-0000-0000-0000-00005cbc9eb6"
       (reference "P7") (unit 1) (value "SWITCH_MAIN") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical")
     )
-    (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005ca38ad1"
-      (reference "P8") (unit 1) (value "JACKS_PANEL") (footprint "Connector_PinSocket_2.54mm:PinSocket_2x07_P2.54mm_Vertical")
+    (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/d5e24796-a722-4626-87ab-ccd7d2824fa3"
+      (reference "P8") (unit 1) (value "JACKS_PANEL") (footprint "Connector_PinSocket_2.54mm:PinSocket_2x08_P2.54mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c5f/00000000-0000-0000-0000-00005b2f33a9"
       (reference "Q1") (unit 1) (value "2N3904") (footprint "Package_TO_SOT_THT:TO-92_Inline_Wide")
@@ -718,67 +718,67 @@
       (reference "RV4") (unit 1) (value "SWING") (footprint "Walter Resistors:trimmer_alps-rk09k1130ah1")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e0f90"
-      (reference "SW1") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW1") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e1650"
-      (reference "SW2") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW2") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e16f3"
-      (reference "SW3") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW3") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e1795"
-      (reference "SW4") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW4") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e1837"
-      (reference "SW5") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW5") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e18db"
-      (reference "SW6") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW6") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e1983"
-      (reference "SW7") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW7") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b2e1a2b"
-      (reference "SW8") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW8") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005b33f0f9"
-      (reference "SW9") (unit 1) (value "SW_DPDT_x2") (footprint "My Library:submini_toggle_DPDT_wider")
+      (reference "SW9") (unit 1) (value "SW_DPDT_x2") (footprint "myfootprints:submini_toggle_DPDT_wider")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33e781"
-      (reference "SW9") (unit 2) (value "SW_DPDT_x2") (footprint "My Library:submini_toggle_DPDT_wider")
+      (reference "SW9") (unit 2) (value "SW_DPDT_x2") (footprint "myfootprints:submini_toggle_DPDT_wider")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33f97a"
-      (reference "SW10") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW10") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33faf7"
-      (reference "SW11") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW11") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33fb99"
-      (reference "SW12") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW12") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33fc3b"
-      (reference "SW13") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW13") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33fcdd"
-      (reference "SW14") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW14") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33fd81"
-      (reference "SW15") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW15") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33fe27"
-      (reference "SW16") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW16") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c7c/00000000-0000-0000-0000-00005b33fed0"
-      (reference "SW17") (unit 1) (value "SW_SPDT") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW17") (unit 1) (value "SW_SPDT") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005b26bee3"
-      (reference "SW18") (unit 1) (value "Run/Stop") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW18") (unit 1) (value "Run/Stop") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005b27a142"
-      (reference "SW19") (unit 1) (value "Up/Down") (footprint "My Library:submini_toggle_SPDT_2267079")
+      (reference "SW19") (unit 1) (value "Up/Down") (footprint "myfootprints:submini_toggle_SPDT_2267079")
     )
     (path "/00000000-0000-0000-0000-000058097bf8/00000000-0000-0000-0000-000058097c50/00000000-0000-0000-0000-00005b289385"
-      (reference "SW20") (unit 1) (value "RESET") (footprint "My Library:C&K_round_pushbutton")
+      (reference "SW20") (unit 1) (value "RESET") (footprint "myfootprints:C&K_round_pushbutton")
     )
     (path "/00000000-0000-0000-0000-000058097be3/00000000-0000-0000-0000-00005b4673ae"
       (reference "U1") (unit 1) (value "LM78L05_TO92") (footprint "Package_TO_SOT_THT:TO-92_Inline_Wide")

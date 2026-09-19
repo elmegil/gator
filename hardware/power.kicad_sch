@@ -1489,7 +1489,7 @@
     (uuid 00000000-0000-0000-0000-00005b46aace)
     (property "Reference" "P1" (id 0) (at 64.262 80.645 0))
     (property "Value" "MOTM Power" (id 1) (at 64.262 82.9564 0))
-    (property "Footprint" "My Library:MTA-156" (id 2) (at 62.23 91.44 0)
+    (property "Footprint" "myfootprints:MTA-156-4" (id 2) (at 62.23 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 62.23 91.44 0)
